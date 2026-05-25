@@ -227,7 +227,7 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
     };
 
     const drawGrid = (width: number, height: number) => {
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
       ctx.lineWidth = 0.5;
       ctx.beginPath();
       
