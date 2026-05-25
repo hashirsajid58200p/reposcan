@@ -1,8 +1,16 @@
-# RepoScan
+<p align="center">
+  <img src="public/favico.png" width="80" height="80" alt="RepoScan Logo" />
+</p>
 
-A professional, high-performance repository health analyzer designed for deep technical audits. RepoScan evaluates public GitHub repositories on key maintenance, architectural, and community metrics to generate a comprehensive, actionable health score and prioritized fix list.
+<h1 align="center">RepoScan</h1>
 
-This project was built as a technical submission for the Dev Weekends Fellowship 2026.
+<p align="center"><strong>A professional, high-performance repository health analyzer designed for deep technical audits. RepoScan evaluates public GitHub repositories on key maintenance, architectural, and community metrics to generate a comprehensive, actionable health score and prioritized fix list.</strong></p>
+
+<p align="center">
+  <em>This project was built as a technical submission for the Dev Weekends Fellowship 2026.</em>
+</p>
+
+---
 
 ## Previews
 
@@ -12,11 +20,20 @@ This project was built as a technical submission for the Dev Weekends Fellowship
 
 ## Core Features
 
-* **Real-Time API Integration:** Bypasses Next.js's aggressive internal caching using Next.js App Router API Route proxies configured with `cache: "no-store"` headers. This ensures that every health check reflects fresh, real-time repository metadata, commit histories, and issue reports.
-* **Debounced Autocomplete Search:** Implements a high-efficiency autocomplete search using the GitHub Search API. A 400ms debounce ensures that repository suggestions update smoothly as the developer types, preventing redundant network requests and protecting API rate limits.
-* **Brutalist UI & Fluid Animations:** Designed under a strict, hyper-minimalist brutalist aesthetic using pure black (`#000000`) and high-contrast yellow (`#FFD600`) tokens. The layout utilizes custom utility theme bindings via Tailwind CSS v4 and fluid view transitions managed through Framer Motion.
-* **High-Performance Canvas Background:** Features an advanced "Data Stream / Cyber Comet" background animation running at 60fps on a native HTML5 Canvas. The particle simulation uses customized linear gradient vectors, tapered teardrop geometry, and localized path illumination to deliver premium technical graphics without CPU overhead.
-* **Resilient System Architecture:** Formed around extremely robust parsing and exception handling. The input parser handles raw repository paths, full URLs, SSH tags, and `.git` suffixes seamlessly. Behind the scenes, the analysis engine handles API timeouts, missing metadata fields, and rate limit errors (403/429) gracefully, returning detailed diagnostic alerts instead of crashing.
+### Real-Time API Integration
+Bypasses Next.js's aggressive internal caching using Next.js App Router API Route proxies configured with `cache: "no-store"` headers. This ensures that every health check reflects fresh, real-time repository metadata, commit histories, and issue reports.
+
+### Debounced Autocomplete Search
+Implements a high-efficiency autocomplete search using the GitHub Search API. A 400ms debounce ensures that repository suggestions update smoothly as the developer types, preventing redundant network requests and protecting API rate limits.
+
+### Brutalist UI & Fluid Animations
+Designed under a strict, hyper-minimalist brutalist aesthetic using pure black (`#000000`) and high-contrast yellow (`#FFD600`) tokens. The layout utilizes custom utility theme bindings via Tailwind CSS v4 and fluid view transitions managed through Framer Motion.
+
+### High-Performance Canvas Background
+Features an advanced "Data Stream / Cyber Comet" background animation running at 60fps on a native HTML5 Canvas. The particle simulation uses customized linear gradient vectors, tapered teardrop geometry, and localized path illumination to deliver premium technical graphics without CPU overhead.
+
+### Resilient System Architecture
+Formed around extremely robust parsing and exception handling. The input parser handles raw repository paths, full URLs, SSH tags, and `.git` suffixes seamlessly. Behind the scenes, the analysis engine handles API timeouts, missing metadata fields, and rate limit errors (403/429) gracefully, returning detailed diagnostic alerts instead of crashing.
 
 ## Tech Stack
 
