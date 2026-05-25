@@ -169,40 +169,45 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
         ctx.shadowBlur = 12;
         ctx.shadowColor = "#FFD600";
 
-        // Draw linear gradient tail extending directly behind travel direction
-        ctx.beginPath();
-        let grad: CanvasGradient;
+        // Draw tapered cometary tail in segmented increments to adjust thickness dynamically
+        const numSegments = 12;
+        const startWidth = 5.0; // Matches dot diameter (radius 2.5 * 2)
+        const endWidth = 0.2;
 
-        if (this.axis === "x") {
-          if (this.direction === 1) {
-            grad = ctx.createLinearGradient(this.x, this.y, this.x - this.length, this.y);
+        for (let i = 0; i < numSegments; i++) {
+          const tStart = i / numSegments;
+          const tEnd = (i + 1) / numSegments;
+
+          let sx = this.x;
+          let sy = this.y;
+          let ex = this.x;
+          let ey = this.y;
+
+          const distStart = tStart * this.length;
+          const distEnd = tEnd * this.length;
+
+          if (this.axis === "x") {
+            sx = this.x - distStart * this.direction;
+            ex = this.x - distEnd * this.direction;
           } else {
-            grad = ctx.createLinearGradient(this.x, this.y, this.x + this.length, this.y);
+            sy = this.y - distStart * this.direction;
+            ey = this.y - distEnd * this.direction;
           }
-        } else {
-          if (this.direction === 1) {
-            grad = ctx.createLinearGradient(this.x, this.y, this.x, this.y - this.length);
-          } else {
-            grad = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.length);
-          }
+
+          // Gradually decrease width and opacity
+          const segmentWidth = startWidth - tStart * (startWidth - endWidth);
+          const opacity = 1.0 - tStart;
+
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(255, 214, 0, ${opacity})`;
+          ctx.lineWidth = segmentWidth;
+          ctx.lineCap = "round";
+          ctx.moveTo(sx, sy);
+          ctx.lineTo(ex, ey);
+          ctx.stroke();
         }
 
-        grad.addColorStop(0, "rgba(255, 214, 0, 1)");   // Bright accent yellow head
-        grad.addColorStop(1, "rgba(255, 214, 0, 0)");   // Completely transparent tail fade
-        
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = 1.5;
-        
-        if (this.axis === "x") {
-          ctx.moveTo(this.x, this.y);
-          ctx.lineTo(this.direction === 1 ? this.x - this.length : this.x + this.length, this.y);
-        } else {
-          ctx.moveTo(this.x, this.y);
-          ctx.lineTo(this.x, this.direction === 1 ? this.y - this.length : this.y + this.length);
-        }
-        ctx.stroke();
-
-        // Draw the circular head dot (both tail and head glow together!)
+        // Draw the circular head dot (keeps leading edge perfectly rounded)
         ctx.fillStyle = "#FFD600";
         ctx.beginPath();
         ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
