@@ -49,10 +49,28 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
         this.axis = Math.random() > 0.5 ? "x" : "y";
         this.direction = Math.random() > 0.5 ? 1 : -1;
 
+        // Collect occupied grid lines from active comets to enforce single-dot-per-line rule
+        const occupiedY = new Set<number>();
+        const occupiedX = new Set<number>();
+        if (particles && particles.length > 0) {
+          particles.forEach((p) => {
+            if (p !== this) {
+              if (p.axis === "x") occupiedY.add(p.y);
+              else occupiedX.add(p.x);
+            }
+          });
+        }
+
         if (this.axis === "x") {
           // Travel horizontally along a random Y grid line
           const numGridLinesY = Math.floor(this.canvasHeight / gridSize);
-          const gridY = Math.floor(Math.random() * (numGridLinesY + 1));
+          let gridY = Math.floor(Math.random() * (numGridLinesY + 1));
+          
+          let attempts = 0;
+          while (occupiedY.has(gridY * gridSize) && attempts < 50) {
+            gridY = Math.floor(Math.random() * (numGridLinesY + 1));
+            attempts++;
+          }
           this.y = gridY * gridSize;
 
           if (this.direction === 1) {
@@ -65,7 +83,13 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
         } else {
           // Travel vertically along a random X grid line
           const numGridLinesX = Math.floor(this.canvasWidth / gridSize);
-          const gridX = Math.floor(Math.random() * (numGridLinesX + 1));
+          let gridX = Math.floor(Math.random() * (numGridLinesX + 1));
+          
+          let attempts = 0;
+          while (occupiedX.has(gridX * gridSize) && attempts < 50) {
+            gridX = Math.floor(Math.random() * (numGridLinesX + 1));
+            attempts++;
+          }
           this.x = gridX * gridSize;
 
           if (this.direction === 1) {
@@ -103,16 +127,40 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
       }
 
       draw(ctx: CanvasRenderingContext2D) {
-        // 1. Draw a highlighted laser track line along the grid path that the particle is traveling on
-        ctx.strokeStyle = "rgba(255, 214, 0, 0.08)";
-        ctx.lineWidth = 0.5;
+        // 1. Draw a localized highlighted laser path (like a car headlight) along the grid track
+        const lightSpan = 100; // illuminates 100px ahead and 100px behind the dot
         ctx.beginPath();
+        let pathGrad: CanvasGradient;
+
         if (this.axis === "x") {
-          ctx.moveTo(0, this.y);
-          ctx.lineTo(this.canvasWidth, this.y);
+          pathGrad = ctx.createLinearGradient(
+            this.x - lightSpan,
+            this.y,
+            this.x + lightSpan,
+            this.y
+          );
         } else {
-          ctx.moveTo(this.x, 0);
-          ctx.lineTo(this.x, this.canvasHeight);
+          pathGrad = ctx.createLinearGradient(
+            this.x,
+            this.y - lightSpan,
+            this.x,
+            this.y + lightSpan
+          );
+        }
+
+        pathGrad.addColorStop(0, "rgba(255, 214, 0, 0)");
+        pathGrad.addColorStop(0.5, "rgba(255, 214, 0, 0.16)"); // Peak glow right around the head
+        pathGrad.addColorStop(1, "rgba(255, 214, 0, 0)");
+
+        ctx.strokeStyle = pathGrad;
+        ctx.lineWidth = 0.75;
+
+        if (this.axis === "x") {
+          ctx.moveTo(this.x - lightSpan, this.y);
+          ctx.lineTo(this.x + lightSpan, this.y);
+        } else {
+          ctx.moveTo(this.x, this.y - lightSpan);
+          ctx.lineTo(this.x, this.y + lightSpan);
         }
         ctx.stroke();
 
