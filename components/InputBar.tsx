@@ -134,7 +134,7 @@ export default function InputBar({ onSubmit, isLoading = false, initialValue = "
         <div ref={containerRef} className="relative w-full">
             <form
                 onSubmit={handleSubmit}
-                className={`flex w-full h-[52px] ${isLoading ? "pointer-events-none" : ""}`}
+                className={`flex w-full h-[46px] md:h-[52px] ${isLoading ? "pointer-events-none" : ""}`}
             >
                 <input
                     type="text"
@@ -146,24 +146,23 @@ export default function InputBar({ onSubmit, isLoading = false, initialValue = "
                     }}
                     disabled={isLoading}
                     placeholder="github.com/owner/repository"
-                    className="flex-grow bg-bg-secondary border border-border-default focus:border-border-active text-text-primary text-[15px] font-inter px-[16px] outline-none rounded-none transition-colors duration-150 placeholder:text-text-dim"
+                    className="flex-grow bg-bg-secondary border border-border-default focus:border-border-active text-text-primary text-[13px] md:text-[15px] font-inter px-[12px] md:px-[16px] outline-none rounded-none transition-colors duration-150 placeholder:text-text-dim min-w-0"
                     autoComplete="off"
                     spellCheck="false"
                 />
                 <button
                     type="submit"
                     disabled={isLoading || !input.trim()}
-                    className="h-[52px] px-4 md:w-[140px] bg-accent text-accent-text font-bold font-inter text-[14px] uppercase flex items-center justify-center rounded-none hover:bg-white transition-colors duration-150 flex-shrink-0 disabled:bg-bg-tertiary disabled:text-text-secondary disabled:cursor-not-allowed cursor-pointer"
+                    className="h-full px-3 md:px-5 bg-accent text-accent-text font-bold font-inter text-[12px] md:text-[14px] uppercase flex items-center justify-center rounded-none hover:bg-white transition-colors duration-150 flex-shrink-0 disabled:bg-bg-tertiary disabled:text-text-secondary disabled:cursor-not-allowed cursor-pointer"
                 >
-                    <span className="hidden md:inline">Analyze</span>
-                    <span className="inline md:hidden">Go</span>
-                    <ArrowRight className="ml-1.5 w-[16px] h-[16px] stroke-[2.5]" />
+                    Analyze
+                    <ArrowRight className="ml-1.5 w-[14px] md:w-[16px] h-[14px] md:h-[16px] stroke-[2.5]" />
                 </button>
             </form>
 
             {/* Suggestions Dropdown */}
             {showDropdown && suggestions.length > 0 && (
-                <div className="absolute left-0 right-0 top-[54px] z-50 bg-bg-secondary border border-border-default shadow-2xl flex flex-col max-h-[300px] overflow-y-auto">
+                <div className="absolute left-0 right-0 top-[48px] md:top-[54px] z-50 bg-bg-secondary border border-border-default shadow-2xl flex flex-col max-h-[250px] md:max-h-[300px] overflow-y-auto">
                     {suggestions.map((repo, idx) => (
                         <div
                             key={repo.id}
