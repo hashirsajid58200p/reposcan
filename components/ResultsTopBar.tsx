@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 
 interface ResultsTopBarProps {
@@ -24,12 +23,11 @@ export default function ResultsTopBar({ repoFullName, onNewScan }: ResultsTopBar
         }}
         className="hidden md:flex items-center hover:opacity-80 transition-opacity cursor-pointer"
       >
-        <Image
+        <img
           src="/logo.png?v=2"
           alt="RepoScan"
           width={100}
           height={40}
-          priority
           className="object-contain"
         />
       </Link>

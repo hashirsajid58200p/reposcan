@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Header() {
     return (
@@ -13,12 +12,11 @@ export default function Header() {
                 }}
                 className="flex items-center hover:opacity-80 transition-opacity cursor-pointer"
             >
-                <Image
+                <img
                     src="/logo.png?v=2"
                     alt="RepoScan"
                     width={100}
                     height={40}
-                    priority
                     className="object-contain"
                 />
             </Link>
