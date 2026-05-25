@@ -29,8 +29,7 @@ export default function InputBar({ onSubmit, isLoading = false, initialValue = "
     return (
         <form
             onSubmit={handleSubmit}
-            // Dims to 40% opacity during the loading state as requested in the design spec
-            className={`flex w-full h-[52px] transition-opacity duration-300 ${isLoading ? "opacity-40 pointer-events-none" : "opacity-100"
+            className={`flex w-full h-[52px] ${isLoading ? "pointer-events-none" : ""
                 }`}
         >
             <input
@@ -46,7 +45,7 @@ export default function InputBar({ onSubmit, isLoading = false, initialValue = "
             <button
                 type="submit"
                 disabled={isLoading || !input.trim()}
-                className="h-[52px] w-[140px] bg-accent text-accent-text font-bold font-inter text-[14px] uppercase flex items-center justify-center rounded-none hover:bg-white transition-colors duration-150 flex-shrink-0 disabled:opacity-50 disabled:hover:bg-accent cursor-pointer"
+                className="h-[52px] w-[140px] bg-accent text-accent-text font-bold font-inter text-[14px] uppercase flex items-center justify-center rounded-none hover:bg-white transition-colors duration-150 flex-shrink-0 disabled:bg-bg-tertiary disabled:text-text-secondary disabled:cursor-not-allowed cursor-pointer"
             >
                 Analyze
                 <ArrowRight className="ml-1.5 w-[16px] h-[16px] stroke-[2.5]" />
