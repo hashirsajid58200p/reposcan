@@ -153,9 +153,10 @@ export default function InputBar({ onSubmit, isLoading = false, initialValue = "
                 <button
                     type="submit"
                     disabled={isLoading || !input.trim()}
-                    className="h-[52px] w-[140px] bg-accent text-accent-text font-bold font-inter text-[14px] uppercase flex items-center justify-center rounded-none hover:bg-white transition-colors duration-150 flex-shrink-0 disabled:bg-bg-tertiary disabled:text-text-secondary disabled:cursor-not-allowed cursor-pointer"
+                    className="h-[52px] px-4 md:w-[140px] bg-accent text-accent-text font-bold font-inter text-[14px] uppercase flex items-center justify-center rounded-none hover:bg-white transition-colors duration-150 flex-shrink-0 disabled:bg-bg-tertiary disabled:text-text-secondary disabled:cursor-not-allowed cursor-pointer"
                 >
-                    Analyze
+                    <span className="hidden md:inline">Analyze</span>
+                    <span className="inline md:hidden">Go</span>
                     <ArrowRight className="ml-1.5 w-[16px] h-[16px] stroke-[2.5]" />
                 </button>
             </form>

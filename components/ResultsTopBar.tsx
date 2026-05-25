@@ -30,9 +30,9 @@ export default function ResultsTopBar({ repoFullName, onNewScan }: ResultsTopBar
         />
       </Link>
 
-      <div className="flex items-center gap-2 font-inter font-bold text-text-primary text-[14px]">
-        <span className="w-2 h-2 rounded-none bg-accent animate-pulse" />
-        {repoFullName}
+      <div className="flex items-center gap-2 font-inter font-bold text-text-primary text-[14px] min-w-0">
+        <span className="w-2 h-2 rounded-none bg-accent animate-pulse shrink-0" />
+        <span className="truncate max-w-[150px] sm:max-w-none">{repoFullName}</span>
       </div>
 
       <button

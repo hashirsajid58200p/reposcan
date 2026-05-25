@@ -152,7 +152,7 @@ export default function HeroSection({
             </div>
 
             {/* Atmospheric Details */}
-            <div className="absolute bottom-6 left-6 md:left-[80px] origin-bottom-left -rotate-90 text-[11px] font-mono text-[#333333] whitespace-nowrap pointer-events-none select-none">
+            <div className="absolute bottom-6 left-6 md:left-[80px] origin-bottom-left -rotate-90 text-[11px] font-mono text-[#333333] whitespace-nowrap pointer-events-none select-none hidden md:block">
                 REPO HEALTH ANALYZER v1.0
             </div>
 

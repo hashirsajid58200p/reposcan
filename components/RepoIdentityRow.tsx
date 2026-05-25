@@ -23,7 +23,7 @@ export default function RepoIdentityRow({ repo }: RepoIdentityRowProps) {
     >
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-6">
         <div>
-          <h2 className="font-grotesk font-bold text-[32px] leading-none mb-2">
+          <h2 className="font-grotesk font-bold text-[24px] md:text-[32px] leading-tight mb-2 break-all">
             <span className="text-text-secondary">{owner}</span>
             <span className="text-text-secondary">/</span>
             <span className="text-text-primary">{name}</span>
