@@ -36,8 +36,8 @@ async function fetchWithTimeout(endpoint: string) {
         const response = await fetch(`${GITHUB_API_BASE}${endpoint}`, {
             headers,
             signal: controller.signal,
-            // Cache briefly to prevent aggressive spamming on dev reloads
-            next: { revalidate: 60 },
+            // Completely disables Next.js caching to fetch real-time data
+            cache: "no-store", 
         });
 
         clearTimeout(timeoutId);

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface ResultsTopBarProps {
   repoFullName: string;
@@ -14,8 +15,15 @@ export default function ResultsTopBar({ repoFullName, onNewScan }: ResultsTopBar
       animate={{ opacity: 1, y: 0 }}
       className="sticky top-0 w-full z-40 bg-black/90 border-b border-border-default h-16 px-6 md:px-[80px] flex items-center justify-between"
     >
-      <div className="font-grotesk font-bold text-[16px] tracking-tight text-text-primary uppercase hidden md:block">
-        REPO<span className="text-accent">SCAN</span>
+      <div className="hidden md:flex items-center">
+        <Image
+          src="/logo.png"
+          alt="RepoScan"
+          width={75}
+          height={30}
+          priority
+          className="object-contain"
+        />
       </div>
 
       <div className="flex items-center gap-2 font-inter font-bold text-text-primary text-[14px]">

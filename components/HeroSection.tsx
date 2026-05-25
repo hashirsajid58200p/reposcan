@@ -28,7 +28,7 @@ export default function HeroSection({ onSubmit, isLoading }: HeroSectionProps) {
     const itemVariants = {
         hidden: { opacity: 0, y: 10 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
-    };
+    } as const;
 
     return (
         <section className="relative flex flex-col justify-center flex-grow w-full px-6 md:px-[80px] min-h-screen">

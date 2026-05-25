@@ -27,6 +27,9 @@ const spaceMono = Space_Mono({
 export const metadata: Metadata = {
   title: "RepoScan | GitHub Repository Health Checker",
   description: "Paste a public GitHub URL. Get a score, a breakdown, and a fix list.",
+  icons: {
+    icon: "/favico.png",
+  },
 };
 
 export default function RootLayout({
