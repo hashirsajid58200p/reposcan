@@ -26,7 +26,7 @@ export default function ResultsTopBar({ repoFullName, onNewScan }: ResultsTopBar
         <img
           src="/logo.png?v=2"
           alt="RepoScan"
-          className="h-10 md:h-12 w-auto object-contain"
+          className="h-12 md:h-14 w-auto object-contain"
         />
       </Link>
 
