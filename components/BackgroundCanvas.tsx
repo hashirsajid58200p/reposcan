@@ -44,7 +44,7 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
       }
 
       reset(initial = false) {
-        this.length = Math.random() * 100 + 60; // Tail length: 60px to 160px
+        this.length = Math.random() * 40 + 25; // Tail length: 25px to 65px (shorter and sleeker)
         this.speed = (Math.random() * 150 + 100) / 1000; // Speed: 100px to 250px per second -> 0.1 to 0.25 px per ms
         this.axis = Math.random() > 0.5 ? "x" : "y";
         this.direction = Math.random() > 0.5 ? 1 : -1;
@@ -103,7 +103,20 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
       }
 
       draw(ctx: CanvasRenderingContext2D) {
-        // 1. Draw linear gradient tail extending directly behind travel direction
+        // 1. Draw a highlighted laser track line along the grid path that the particle is traveling on
+        ctx.strokeStyle = "rgba(255, 214, 0, 0.08)";
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        if (this.axis === "x") {
+          ctx.moveTo(0, this.y);
+          ctx.lineTo(this.canvasWidth, this.y);
+        } else {
+          ctx.moveTo(this.x, 0);
+          ctx.lineTo(this.x, this.canvasHeight);
+        }
+        ctx.stroke();
+
+        // 2. Draw linear gradient tail extending directly behind travel direction
         ctx.beginPath();
         let grad: CanvasGradient;
 
@@ -136,9 +149,15 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
         }
         ctx.stroke();
 
-        // 2. Draw the glowing circular head using shadowBlur
+        // 3. Draw a physical glow bloom halo around the head
+        ctx.fillStyle = "rgba(255, 214, 0, 0.15)";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 4. Draw the glowing circular head using shadowBlur
         ctx.save();
-        ctx.shadowBlur = 12;
+        ctx.shadowBlur = 15;
         ctx.shadowColor = "#FFD600";
         ctx.fillStyle = "#FFD600";
         ctx.beginPath();
@@ -159,8 +178,8 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
       canvas.style.width = `${rect.width}px`;
       canvas.style.height = `${rect.height}px`;
 
-      // 25 active concurrent data stream particles is clean and performant
-      particles = Array.from({ length: 25 }, () => new Particle(rect.width, rect.height));
+      // 12 active concurrent data stream particles is perfectly clean, elegant, and minimal
+      particles = Array.from({ length: 12 }, () => new Particle(rect.width, rect.height));
     };
 
     const drawGrid = (width: number, height: number) => {
