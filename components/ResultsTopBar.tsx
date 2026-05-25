@@ -25,10 +25,10 @@ export default function ResultsTopBar({ repoFullName, onNewScan }: ResultsTopBar
         className="hidden md:flex items-center hover:opacity-80 transition-opacity cursor-pointer"
       >
         <Image
-          src="/logo.png"
+          src="/logo.png?v=2"
           alt="RepoScan"
-          width={120}
-          height={48}
+          width={100}
+          height={40}
           priority
           className="object-contain"
         />
