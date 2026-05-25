@@ -19,8 +19,8 @@ export default function ResultsTopBar({ repoFullName, onNewScan }: ResultsTopBar
         <Image
           src="/logo.png"
           alt="RepoScan"
-          width={75}
-          height={30}
+          width={100}
+          height={40}
           priority
           className="object-contain"
         />

@@ -37,27 +37,12 @@ export default function Home() {
             <HeroSection 
               onSubmit={analyzeRepo} 
               isLoading={state.status === "loading"} 
+              status={state.status}
+              loadingMessage={state.status === "loading" ? state.loadingMessage : undefined}
+              errorType={state.status === "error" ? state.errorType : undefined}
+              errorMessage={state.status === "error" ? state.message : undefined}
+              onDismissError={resetAnalysis}
             />
-
-            {/* Absolute positioning injects Loading/Error directly below the input area */}
-            <div className="absolute top-1/2 left-6 md:left-[80px] w-full max-w-[600px] mt-[80px] z-20 pointer-events-auto">
-              <AnimatePresence mode="wait">
-                {state.status === "loading" && (
-                  <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <LoadingState message={state.loadingMessage} />
-                  </motion.div>
-                )}
-                {state.status === "error" && (
-                  <motion.div key="error" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <ErrorBanner
-                      type={state.errorType}
-                      message={state.message}
-                      onDismiss={resetAnalysis}
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
           </motion.div>
         ) : (
           // STATE 2: RESULTS

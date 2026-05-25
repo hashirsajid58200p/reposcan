@@ -9,8 +9,8 @@ export default function Header() {
                 <Image
                     src="/logo.png"
                     alt="RepoScan"
-                    width={100}
-                    height={40}
+                    width={150}
+                    height={60}
                     priority
                     className="object-contain"
                 />
