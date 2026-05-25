@@ -23,15 +23,17 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
     if (!ctx) return;
 
     let animationFrameId: number;
-    let dots: Dot[] = [];
+    let particles: Particle[] = [];
     const gridSize = 48;
 
-    // Dot Class for managing individual particle state
-    class Dot {
+    // Particle Class for managing Cyber Comet stream state
+    class Particle {
       x: number = 0;
       y: number = 0;
-      dir: number = 0;
+      length: number = 0;
       speed: number = 0;
+      axis: "x" | "y" = "x";
+      direction: 1 | -1 = 1;
       canvasWidth: number;
       canvasHeight: number;
 
@@ -42,65 +44,111 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
       }
 
       reset(initial = false) {
-        // Snap strictly to grid intersections
-        this.x = Math.floor((Math.random() * this.canvasWidth) / gridSize) * gridSize;
-        this.y = Math.floor((Math.random() * this.canvasHeight) / gridSize) * gridSize;
+        this.length = Math.random() * 100 + 60; // Tail length: 60px to 160px
+        this.speed = (Math.random() * 150 + 100) / 1000; // Speed: 100px to 250px per second -> 0.1 to 0.25 px per ms
+        this.axis = Math.random() > 0.5 ? "x" : "y";
+        this.direction = Math.random() > 0.5 ? 1 : -1;
 
-        // 0: up, 1: right, 2: down, 3: left
-        this.dir = Math.floor(Math.random() * 4);
-        
-        // Speed: 40px to 80px per second -> 0.04 to 0.08 px per ms
-        this.speed = (Math.random() * 40 + 40) / 1000;
+        if (this.axis === "x") {
+          // Travel horizontally along a random Y grid line
+          const numGridLinesY = Math.floor(this.canvasHeight / gridSize);
+          const gridY = Math.floor(Math.random() * (numGridLinesY + 1));
+          this.y = gridY * gridSize;
+
+          if (this.direction === 1) {
+            // Move left-to-right: spawn to the left of the screen
+            this.x = initial ? Math.random() * this.canvasWidth : -this.length - 20;
+          } else {
+            // Move right-to-left: spawn to the right of the screen
+            this.x = initial ? Math.random() * this.canvasWidth : this.canvasWidth + this.length + 20;
+          }
+        } else {
+          // Travel vertically along a random X grid line
+          const numGridLinesX = Math.floor(this.canvasWidth / gridSize);
+          const gridX = Math.floor(Math.random() * (numGridLinesX + 1));
+          this.x = gridX * gridSize;
+
+          if (this.direction === 1) {
+            // Move top-to-bottom: spawn above the screen
+            this.y = initial ? Math.random() * this.canvasHeight : -this.length - 20;
+          } else {
+            // Move bottom-to-top: spawn below the screen
+            this.y = initial ? Math.random() * this.canvasHeight : this.canvasHeight + this.length + 20;
+          }
+        }
       }
 
       update(dt: number) {
         const moveAmount = this.speed * dt * speedRef.current;
 
-        const prevIntersectionX = Math.floor(this.x / gridSize) * gridSize;
-        const prevIntersectionY = Math.floor(this.y / gridSize) * gridSize;
+        if (this.axis === "x") {
+          this.x += moveAmount * this.direction;
 
-        if (this.dir === 0) this.y -= moveAmount;
-        else if (this.dir === 1) this.x += moveAmount;
-        else if (this.dir === 2) this.y += moveAmount;
-        else if (this.dir === 3) this.x -= moveAmount;
+          // Check if particle is completely off-screen (including its tail)
+          if (this.direction === 1 && this.x > this.canvasWidth + this.length + 50) {
+            this.reset(false);
+          } else if (this.direction === -1 && this.x < -this.length - 50) {
+            this.reset(false);
+          }
+        } else {
+          this.y += moveAmount * this.direction;
 
-        const nextIntersectionX = Math.floor(this.x / gridSize) * gridSize;
-        const nextIntersectionY = Math.floor(this.y / gridSize) * gridSize;
-
-        // Check for turns when crossing an intersection
-        if ((this.dir === 1 || this.dir === 3) && prevIntersectionX !== nextIntersectionX) {
-          this.snapAndTurn(nextIntersectionX, this.y);
-        } else if ((this.dir === 0 || this.dir === 2) && prevIntersectionY !== nextIntersectionY) {
-          this.snapAndTurn(this.x, nextIntersectionY);
-        }
-
-        // Seamless wrapping around edges
-        if (this.x < 0) this.x = this.canvasWidth;
-        if (this.x > this.canvasWidth) this.x = 0;
-        if (this.y < 0) this.y = this.canvasHeight;
-        if (this.y > this.canvasHeight) this.y = 0;
-      }
-
-      snapAndTurn(snapX: number, snapY: number) {
-        // 15% chance to change axis
-        if (Math.random() < 0.15) {
-          this.x = snapX;
-          this.y = snapY;
-          // Switch between horizontal and vertical
-          this.dir = (this.dir + (Math.random() > 0.5 ? 1 : 3)) % 4;
+          // Check if particle is completely off-screen (including its tail)
+          if (this.direction === 1 && this.y > this.canvasHeight + this.length + 50) {
+            this.reset(false);
+          } else if (this.direction === -1 && this.y < -this.length - 50) {
+            this.reset(false);
+          }
         }
       }
 
       draw(ctx: CanvasRenderingContext2D) {
-        ctx.fillStyle = "rgba(255, 214, 0, 0.7)"; // #FFD600 accent
+        // 1. Draw linear gradient tail extending directly behind travel direction
         ctx.beginPath();
-        ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+        let grad: CanvasGradient;
+
+        if (this.axis === "x") {
+          if (this.direction === 1) {
+            grad = ctx.createLinearGradient(this.x, this.y, this.x - this.length, this.y);
+          } else {
+            grad = ctx.createLinearGradient(this.x, this.y, this.x + this.length, this.y);
+          }
+        } else {
+          if (this.direction === 1) {
+            grad = ctx.createLinearGradient(this.x, this.y, this.x, this.y - this.length);
+          } else {
+            grad = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.length);
+          }
+        }
+
+        grad.addColorStop(0, "rgba(255, 214, 0, 1)");   // Bright accent yellow head
+        grad.addColorStop(1, "rgba(255, 214, 0, 0)");   // Completely transparent tail fade
+        
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 1.5;
+        
+        if (this.axis === "x") {
+          ctx.moveTo(this.x, this.y);
+          ctx.lineTo(this.direction === 1 ? this.x - this.length : this.x + this.length, this.y);
+        } else {
+          ctx.moveTo(this.x, this.y);
+          ctx.lineTo(this.x, this.direction === 1 ? this.y - this.length : this.y + this.length);
+        }
+        ctx.stroke();
+
+        // 2. Draw the glowing circular head using shadowBlur
+        ctx.save();
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = "#FFD600";
+        ctx.fillStyle = "#FFD600";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
         ctx.fill();
+        ctx.restore();
       }
     }
 
     const resizeCanvas = () => {
-      // Handle high DPI displays for sharp rendering
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.parentElement?.getBoundingClientRect() || document.body.getBoundingClientRect();
       
@@ -111,12 +159,12 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
       canvas.style.width = `${rect.width}px`;
       canvas.style.height = `${rect.height}px`;
 
-      // Reinitialize dots on resize to fill new area
-      dots = Array.from({ length: 45 }, () => new Dot(rect.width, rect.height));
+      // 25 active concurrent data stream particles is clean and performant
+      particles = Array.from({ length: 25 }, () => new Particle(rect.width, rect.height));
     };
 
     const drawGrid = (width: number, height: number) => {
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.11)";
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
       ctx.lineWidth = 0.5;
       ctx.beginPath();
       
@@ -136,15 +184,14 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
       const dt = time - lastTime;
       lastTime = time;
 
-      // Extract raw width/height (unscaled) for drawing math
       const rect = canvas.getBoundingClientRect();
 
       ctx.clearRect(0, 0, rect.width, rect.height);
       drawGrid(rect.width, rect.height);
 
-      dots.forEach((dot) => {
-        dot.update(dt);
-        dot.draw(ctx);
+      particles.forEach((particle) => {
+        particle.update(dt);
+        particle.draw(ctx);
       });
 
       animationFrameId = requestAnimationFrame(animate);
