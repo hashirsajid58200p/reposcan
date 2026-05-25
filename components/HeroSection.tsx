@@ -66,7 +66,7 @@ export default function HeroSection({
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
-                    className="font-grotesk font-bold text-[36px] md:text-[60px] leading-[1.1] text-text-primary mb-3 text-center"
+                    className="font-grotesk font-bold text-[40px] md:text-[64px] leading-[1.1] text-text-primary mb-3 text-center"
                 >
                     <motion.span variants={itemVariants} className="block">
                         How healthy is
