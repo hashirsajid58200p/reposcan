@@ -66,7 +66,7 @@ export default function HeroSection({
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
-                    className="font-grotesk font-bold text-[40px] md:text-[72px] leading-[1.1] text-text-primary mb-3 text-center"
+                    className="font-grotesk font-bold text-[36px] md:text-[60px] leading-[1.1] text-text-primary mb-3 text-center"
                 >
                     <motion.span variants={itemVariants} className="block">
                         How healthy is
@@ -85,40 +85,6 @@ export default function HeroSection({
                 >
                     Paste a public GitHub URL. Get a score, a breakdown, and a fix list.
                 </motion.p>
-
-                {/* Inline Loading / Error State between Subtitle and Input Bar */}
-                <div className="w-full max-w-[600px] mx-auto flex flex-col items-center">
-                    <AnimatePresence mode="wait">
-                        {status === "loading" && (
-                            <motion.div
-                                key="loading"
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: "auto" }}
-                                exit={{ opacity: 0, height: 0 }}
-                                transition={{ duration: 0.2 }}
-                                className="w-full flex justify-center mb-6"
-                            >
-                                <LoadingState message={loadingMessage || ""} />
-                            </motion.div>
-                        )}
-                        {status === "error" && errorType && (
-                            <motion.div
-                                key="error"
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: "auto" }}
-                                exit={{ opacity: 0, height: 0 }}
-                                transition={{ duration: 0.2 }}
-                                className="w-full flex justify-center mb-6"
-                            >
-                                <ErrorBanner
-                                    type={errorType}
-                                    message={errorMessage || ""}
-                                    onDismiss={onDismissError || (() => {})}
-                                />
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
 
                 {/* Input Area */}
                 <motion.div
@@ -147,6 +113,40 @@ export default function HeroSection({
                         >
                             facebook/react
                         </button>
+                    </div>
+
+                    {/* Inline Loading / Error State below the Try links */}
+                    <div className="w-full max-w-[600px] mx-auto flex flex-col items-center mt-6">
+                        <AnimatePresence mode="wait">
+                            {status === "loading" && (
+                                <motion.div
+                                    key="loading"
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="w-full flex justify-center"
+                                >
+                                    <LoadingState message={loadingMessage || ""} />
+                                </motion.div>
+                            )}
+                            {status === "error" && errorType && (
+                                <motion.div
+                                    key="error"
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="w-full flex justify-center"
+                                >
+                                    <ErrorBanner
+                                        type={errorType}
+                                        message={errorMessage || ""}
+                                        onDismiss={onDismissError || (() => {})}
+                                    />
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 </motion.div>
             </div>

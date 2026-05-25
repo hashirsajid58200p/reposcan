@@ -3,18 +3,25 @@ import Image from "next/image";
 
 export default function Header() {
     return (
-        <header className="absolute top-0 left-0 w-full z-50 flex items-center justify-between px-6 md:px-[80px] h-24 bg-transparent">
+        <header className="absolute top-0 left-0 w-full z-50 flex items-center justify-between px-6 md:px-[80px] h-16 bg-black/90 border-b border-border-default">
             {/* Wordmark Logo */}
-            <div className="flex items-center">
+            <Link
+                href="/"
+                onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = "/";
+                }}
+                className="flex items-center hover:opacity-80 transition-opacity cursor-pointer"
+            >
                 <Image
                     src="/logo.png"
                     alt="RepoScan"
-                    width={150}
-                    height={60}
+                    width={100}
+                    height={40}
                     priority
                     className="object-contain"
                 />
-            </div>
+            </Link>
 
             {/* API Link */}
             <Link

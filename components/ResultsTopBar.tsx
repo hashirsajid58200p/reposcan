@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 interface ResultsTopBarProps {
   repoFullName: string;
@@ -15,7 +16,14 @@ export default function ResultsTopBar({ repoFullName, onNewScan }: ResultsTopBar
       animate={{ opacity: 1, y: 0 }}
       className="sticky top-0 w-full z-40 bg-black/90 border-b border-border-default h-16 px-6 md:px-[80px] flex items-center justify-between"
     >
-      <div className="hidden md:flex items-center">
+      <Link
+        href="/"
+        onClick={(e) => {
+          e.preventDefault();
+          window.location.href = "/";
+        }}
+        className="hidden md:flex items-center hover:opacity-80 transition-opacity cursor-pointer"
+      >
         <Image
           src="/logo.png"
           alt="RepoScan"
@@ -24,7 +32,7 @@ export default function ResultsTopBar({ repoFullName, onNewScan }: ResultsTopBar
           priority
           className="object-contain"
         />
-      </div>
+      </Link>
 
       <div className="flex items-center gap-2 font-inter font-bold text-text-primary text-[14px]">
         <span className="w-2 h-2 rounded-none bg-accent animate-pulse" />
