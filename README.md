@@ -1,37 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RepoScan
 
-## Getting Started
+A professional, high-performance repository health analyzer designed for deep technical audits. RepoScan evaluates public GitHub repositories on key maintenance, architectural, and community metrics to generate a comprehensive, actionable health score and prioritized fix list.
 
-First, run the development server:
+This project was built as a technical submission for the Dev Weekends Fellowship 2026.
 
+## Previews
+
+![RepoScan Preview 1](previews/preview1.png)
+
+![RepoScan Preview 2](previews/preview2.png)
+
+## Core Features
+
+* **Real-Time API Integration:** Bypasses Next.js's aggressive internal caching using Next.js App Router API Route proxies configured with `cache: "no-store"` headers. This ensures that every health check reflects fresh, real-time repository metadata, commit histories, and issue reports.
+* **Debounced Autocomplete Search:** Implements a high-efficiency autocomplete search using the GitHub Search API. A 400ms debounce ensures that repository suggestions update smoothly as the developer types, preventing redundant network requests and protecting API rate limits.
+* **Brutalist UI & Fluid Animations:** Designed under a strict, hyper-minimalist brutalist aesthetic using pure black (`#000000`) and high-contrast yellow (`#FFD600`) tokens. The layout utilizes custom utility theme bindings via Tailwind CSS v4 and fluid view transitions managed through Framer Motion.
+* **High-Performance Canvas Background:** Features an advanced "Data Stream / Cyber Comet" background animation running at 60fps on a native HTML5 Canvas. The particle simulation uses customized linear gradient vectors, tapered teardrop geometry, and localized path illumination to deliver premium technical graphics without CPU overhead.
+* **Resilient System Architecture:** Formed around extremely robust parsing and exception handling. The input parser handles raw repository paths, full URLs, SSH tags, and `.git` suffixes seamlessly. Behind the scenes, the analysis engine handles API timeouts, missing metadata fields, and rate limit errors (403/429) gracefully, returning detailed diagnostic alerts instead of crashing.
+
+## Tech Stack
+
+* **Core Framework:** Next.js 15+ (App Router, Turbopack)
+* **Language:** TypeScript (Strict Mode)
+* **Styling & Theme:** Tailwind CSS v4 (configured via global CSS `@theme` declarations)
+* **Animation & Rendering:** Framer Motion & Native HTML5 Canvas API
+
+## Local Setup & Installation
+
+Follow these steps to run the application locally on your machine:
+
+### 1. Clone and Navigate
+Clone this repository to your local workspace and navigate into the project root:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/hashirsajid58200p/reposcan.git
+cd reposcan
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install Dependencies
+Install the required packages using npm:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Environment Variables
+Create a file named `.env.local` in the project root directory:
+```bash
+touch .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open `.env.local` and add your GitHub Personal Access Token (PAT):
+```env
+GITHUB_TOKEN=your_github_personal_access_token_here
+```
 
-## Learn More
+> [!IMPORTANT]
+> A valid `GITHUB_TOKEN` is strictly required to run scans. Because RepoScan executes 9 parallel requests per scan via `Promise.allSettled` to assess various repository metrics, unauthenticated requests will immediately hit GitHub's strict 60 requests/hour IP rate limit. Providing a PAT increases this limit to 5,000 requests/hour.
 
-To learn more about Next.js, take a look at the following resources:
+### 4. Run Development Server
+Start the Next.js local development server:
+```bash
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# reposcan
+### 5. Access the Application
+Open your browser and navigate to the local server address:
+```
+http://localhost:3000
+```
