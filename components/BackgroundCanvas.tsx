@@ -169,49 +169,42 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
         ctx.shadowBlur = 12;
         ctx.shadowColor = "#FFD600";
 
-        // Draw tapered cometary tail in segmented increments to adjust thickness dynamically
-        const numSegments = 12;
-        const startWidth = 5.0; // Matches dot diameter (radius 2.5 * 2)
-        const endWidth = 0.2;
+        const r = 2.5; // Radius of the leading circular head
+        let tipX = this.x;
+        let tipY = this.y;
 
-        for (let i = 0; i < numSegments; i++) {
-          const tStart = i / numSegments;
-          const tEnd = (i + 1) / numSegments;
-
-          let sx = this.x;
-          let sy = this.y;
-          let ex = this.x;
-          let ey = this.y;
-
-          const distStart = tStart * this.length;
-          const distEnd = tEnd * this.length;
-
-          if (this.axis === "x") {
-            sx = this.x - distStart * this.direction;
-            ex = this.x - distEnd * this.direction;
-          } else {
-            sy = this.y - distStart * this.direction;
-            ey = this.y - distEnd * this.direction;
-          }
-
-          // Gradually decrease width and opacity
-          const segmentWidth = startWidth - tStart * (startWidth - endWidth);
-          const opacity = 1.0 - tStart;
-
-          ctx.beginPath();
-          ctx.strokeStyle = `rgba(255, 214, 0, ${opacity})`;
-          ctx.lineWidth = segmentWidth;
-          ctx.lineCap = "round";
-          ctx.moveTo(sx, sy);
-          ctx.lineTo(ex, ey);
-          ctx.stroke();
+        if (this.axis === "x") {
+          tipX = this.x - this.length * this.direction;
+        } else {
+          tipY = this.y - this.length * this.direction;
         }
 
-        // Draw the circular head dot (keeps leading edge perfectly rounded)
-        ctx.fillStyle = "#FFD600";
+        // Create a single smooth linear gradient spanning from head (solid) to tail tip (transparent)
+        const grad = ctx.createLinearGradient(this.x, this.y, tipX, tipY);
+        grad.addColorStop(0, "rgba(255, 214, 0, 1)");
+        grad.addColorStop(1, "rgba(255, 214, 0, 0)");
+
+        ctx.fillStyle = grad;
+
+        // Draw the tapered cometary tail (triangle joining head circle to tail tip)
         ctx.beginPath();
-        ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
+        if (this.axis === "x") {
+          ctx.moveTo(this.x, this.y - r);
+          ctx.lineTo(this.x, this.y + r);
+          ctx.lineTo(tipX, tipY);
+        } else {
+          ctx.moveTo(this.x - r, this.y);
+          ctx.lineTo(this.x + r, this.y);
+          ctx.lineTo(tipX, tipY);
+        }
+        ctx.closePath();
         ctx.fill();
+
+        // Draw the circular head dot to make the leading edge perfectly round
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+        ctx.fill();
+
         ctx.restore();
       }
     }
