@@ -164,7 +164,12 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
         }
         ctx.stroke();
 
-        // 2. Draw linear gradient tail extending directly behind travel direction
+        // 2. Draw the glowing Cyber Comet (Head Dot AND its Tail together!)
+        ctx.save();
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = "#FFD600";
+
+        // Draw linear gradient tail extending directly behind travel direction
         ctx.beginPath();
         let grad: CanvasGradient;
 
@@ -197,16 +202,7 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
         }
         ctx.stroke();
 
-        // 3. Draw a physical glow bloom halo around the head
-        ctx.fillStyle = "rgba(255, 214, 0, 0.15)";
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, 8, 0, Math.PI * 2);
-        ctx.fill();
-
-        // 4. Draw the glowing circular head using shadowBlur
-        ctx.save();
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = "#FFD600";
+        // Draw the circular head dot (both tail and head glow together!)
         ctx.fillStyle = "#FFD600";
         ctx.beginPath();
         ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
