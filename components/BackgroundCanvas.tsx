@@ -210,8 +210,13 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
     }
 
     const resizeCanvas = () => {
+      const parent = canvas.parentElement;
+      if (!parent) return;
+
+      const rect = parent.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) return;
+
       const dpr = window.devicePixelRatio || 1;
-      const rect = canvas.parentElement?.getBoundingClientRect() || document.body.getBoundingClientRect();
       
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
@@ -220,7 +225,7 @@ export default function BackgroundCanvas({ speedMultiplier = 1.0 }: BackgroundCa
       canvas.style.width = `${rect.width}px`;
       canvas.style.height = `${rect.height}px`;
 
-      // 12 active concurrent data stream particles is perfectly clean, elegant, and minimal
+      // 12 active concurrent data stream comets is clean and minimalist
       particles = Array.from({ length: 12 }, () => new Particle(rect.width, rect.height));
     };
 
